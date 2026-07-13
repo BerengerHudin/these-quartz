@@ -31,7 +31,7 @@ jobs:
       - name: Checkout these-vault → content/
         uses: actions/checkout@v4
         with:
-          repository: bhudin/these-vault
+          repository: BerengerHudin/these-vault
           token: ${{ secrets.VAULT_TOKEN }}
           path: content
           fetch-depth: 1

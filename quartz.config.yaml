@@ -7,8 +7,7 @@ configuration:
   analytics:
     provider: plausible
   locale: fr-FR
-  # À mettre à jour après activation de GitHub Pages
-  baseUrl: bhudin.github.io/these-quartz
+  baseUrl: berengerhudin.github.io/these-quartz
   ignorePatterns:
     - "00-admin"
     - "99-inbox"
