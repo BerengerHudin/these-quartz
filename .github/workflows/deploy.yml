@@ -46,7 +46,7 @@ jobs:
         run: npm ci
 
       - name: Installer les plugins Quartz
-        run: npm run install-plugins
+        run: node --experimental-loader ./.github/scss-loader.mjs node_modules/.bin/tsx ./quartz/plugins/loader/install-plugins.ts
 
       - name: Construire le site Quartz
         run: npx quartz build --output public
