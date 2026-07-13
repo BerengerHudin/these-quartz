@@ -45,6 +45,9 @@ jobs:
       - name: Installer les dépendances
         run: npm ci
 
+      - name: Installer les plugins Quartz
+        run: npm run install-plugins
+
       - name: Construire le site Quartz
         run: npx quartz build --output public
 
