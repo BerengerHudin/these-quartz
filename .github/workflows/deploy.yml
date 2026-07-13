@@ -1,0 +1,68 @@
+name: Déploiement Quartz → GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  # Permet de déclencher manuellement depuis l'onglet Actions
+  workflow_dispatch:
+
+# Permissions pour déployer sur GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# N'autoriser qu'un déploiement simultané
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout these-quartz
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Récupère le vault (repo privé) dans content/
+      # Requiert un PAT avec scope "repo" dans les secrets du repo : VAULT_TOKEN
+      - name: Checkout these-vault → content/
+        uses: actions/checkout@v4
+        with:
+          repository: bhudin/these-vault
+          token: ${{ secrets.VAULT_TOKEN }}
+          path: content
+          fetch-depth: 1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Installer les dépendances
+        run: npm ci
+
+      - name: Construire le site Quartz
+        run: npx quartz build --output public
+
+      - name: Préparer Pages artifact
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Déployer sur GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
