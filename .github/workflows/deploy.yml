@@ -22,14 +22,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout these-quartz
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       # Récupère le vault (repo privé) dans content/
       # Requiert un PAT avec scope "repo" dans les secrets du repo : VAULT_TOKEN
       - name: Checkout these-vault → content/
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: BerengerHudin/these-vault
           token: ${{ secrets.VAULT_TOKEN }}
@@ -37,7 +37,7 @@ jobs:
           fetch-depth: 1
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: npm
@@ -52,10 +52,10 @@ jobs:
         run: npx quartz build --output public
 
       - name: Préparer Pages artifact
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: public
 
@@ -68,4 +68,4 @@ jobs:
     steps:
       - name: Déployer sur GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
